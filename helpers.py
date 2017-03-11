@@ -1,4 +1,5 @@
 import os
+import sys
 from dotenv import load_dotenv, find_dotenv
 import json
 import urllib
@@ -9,20 +10,32 @@ dotenv_path = find_dotenv()
 # load up the entries as environment variables
 load_dotenv(dotenv_path)
 
-WEATHER_API_KEY = os.environ.get("WEATHER_API_KEY")
+WEATHER_KEY = os.environ.get("WEATHER_API_KEY")
 WEATHER_URL = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid={}'
 
-print('-' * 90, WEATHER_API_KEY)
+CURRENCY_KEY = os.environ.get("CURRENCY_API_KEY")
+CURRENCY_URL = 'https://openexchangerates.org//api/latest.json?app_id={}'.format(CURRENCY_KEY)
 
 
 def get_weather(query):
     query = urllib.parse.quote(query)
-    url = WEATHER_URL.format(query, WEATHER_API_KEY)
+    url = WEATHER_URL.format(query, WEATHER_KEY)
     data = urllib.request.urlopen(url).read()
     parsed = json.loads(data)
     weather = None
     if parsed.get("weather"):
-        weather = {"description": parsed["weather"][0]["description"], "temperature": parsed["main"]["temp"],
-                   "city"       : parsed["name"]
-                   }
+        weather = {
+            "description": parsed["weather"][0]["description"],
+            "temperature": parsed["main"]["temp"],
+            "city"               : parsed["name"],
+            'country'         : parsed['sys']['country']
+        }
     return weather
+
+
+def get_rate(frm, to):
+    all_currency = urllib.request.urlopen(CURRENCY_URL).read()
+    parsed = json.loads(all_currency).get('rates')
+    frm_rate = parsed.get(frm.upper())
+    to_rate = parsed.get(to.upper())
+    return (to_rate / frm_rate, parsed.keys())
