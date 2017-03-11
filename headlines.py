@@ -1,6 +1,7 @@
 import feedparser
 from flask import Flask, render_template
 from flask import request
+from helpers import get_weather
 
 app = Flask(__name__)
 
@@ -20,7 +21,8 @@ def get_news():
     else:
         publication = query.lower()
     feed = feedparser.parse(RSS_FEEDS[publication])
-    return render_template("home.html", articles=feed['entries'])
+    weather = get_weather('New York, New York')
+    return render_template("home.html", articles=feed['entries'], weather=weather)
 
 
 if __name__ == '__main__':

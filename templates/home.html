@@ -8,6 +8,7 @@
   <input type="text" name="publication" placeholder="search" />
   <input type="submit" value="Submit" />
 </form>
+<p>The weather for <strong>{{ weather.city }}</strong> is  + {{ weather.temperature }}</p>
     {% for article in articles %}
         <b><a href="{{article.link}}">{{ article.title }}</a></b><br/>
 <i>{{ article.published }}</i><br/>
