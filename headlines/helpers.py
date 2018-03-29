@@ -16,12 +16,14 @@ WEATHER_KEY = os.environ.get("WEATHER_API_KEY")
 WEATHER_URL = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid={}'
 
 CURRENCY_KEY = os.environ.get("CURRENCY_API_KEY")
-CURRENCY_URL = 'https://openexchangerates.org//api/latest.json?app_id={}'.format(CURRENCY_KEY)
+CURRENCY_URL = 'https://openexchangerates.org//api/latest.json?app_id={}'.format(
+    CURRENCY_KEY)
 
 
 def get_weather(query):
     query = urllib.parse.quote(query)
     url = WEATHER_URL.format(query, WEATHER_KEY)
+    print(url)
     data = urllib.request.urlopen(url).read()
     parsed = json.loads(data)
     weather = None
@@ -29,8 +31,8 @@ def get_weather(query):
         weather = {
             "description": parsed["weather"][0]["description"],
             "temperature": parsed["main"]["temp"],
-            "city"       : parsed["name"],
-            'country'    : parsed['sys']['country']
+            "city": parsed["name"],
+            'country': parsed['sys']['country']
         }
     return weather
 
