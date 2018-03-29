@@ -27,12 +27,6 @@ def home():
             rate=rate,
             currencies=sorted(currencies))
         )
-        # expires = datetime.datetime.now() + datetime.timedelta(days=365)
-        # response.set_cookie("publication", publication, expires=expires)
-        # response.set_cookie("city", city, expires=expires)
-        # response.set_cookie("currency_from",
-        #                     currency_from, expires=expires)
-        # response.set_cookie("currency_to", currency_to, expires=expires)
         return response
     except Exception as e:
         return page_not_found(e)
